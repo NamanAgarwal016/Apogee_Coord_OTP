@@ -20,19 +20,52 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnGenerateOtp, btnCheckOtp;
+
     DatabaseReference rootRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnGenerateOtp = (Button)findViewById(R.id.generate_otp);
-        //btnCheckOtp = (Button)findViewById(R.id.check_otp);
 
+        final TextView textViewDisplayOtp = (TextView) findViewById(R.id.diplay_otp);
+        final EditText editTextEventName = (EditText) findViewById(R.id.event_name);
+        final TextView textViewFinalMsg = (TextView) findViewById(R.id.final_msg);
+        Button btnGenerateOtp = (Button) findViewById(R.id.generate_otp);
 
         //database reference pointing to root of database
         rootRef = FirebaseDatabase.getInstance().getReference();
 
+        btnGenerateOtp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final String eventName = editTextEventName.getText().toString();
+
+                Random r = new Random();
+                int i1 = r.nextInt(10000 - 1000) + 1000;
+                textViewDisplayOtp.setText(Integer.toString(i1));
+
+                rootRef.child(eventName).child("CoordOTP").setValue(Integer.toString(i1));
+
+                new CountDownTimer(60000, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        textViewFinalMsg.setText(String.valueOf(millisUntilFinished / 1000));
+                    }
+
+                    public void onFinish() {
+                        // Called after timer finishes
+                        rootRef.child(eventName).child("CoordOTP").setValue("OTP Expired");
+                        textViewFinalMsg.setText("OTP Expired");
+                        textViewDisplayOtp.setText("Your OTP is:");
+                        editTextEventName.setText("");
+                        editTextEventName.setHint("Enter Event Name");
+                    }
+                }.start();
+            }
+        });
+    }
+}
 
 //        new CountDownTimer(90000, 1000) {
 //            public void onTick(long millisUntilFinished) {
@@ -48,34 +81,6 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }.start();
 
-        btnGenerateOtp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Random r = new Random();
-                int i1 = r.nextInt(10000 - 1000) + 1000;
-                TextView textView = (TextView) findViewById(R.id.diplay_otp);
-                textView.setText(Integer.toString(i1));
-
-                rootRef.child("CodingEvent").child("CoordOTP").setValue(Integer.toString(i1));
-
-                new CountDownTimer(60000, 1000) {
-                    public void onTick(long millisUntilFinished) {
-                        TextView textView1 = (TextView) findViewById(R.id.final_msg);
-                        textView1.setText(String.valueOf(millisUntilFinished / 1000));
-                    }
-
-                    public void onFinish() {
-                        // Called after timer finishes
-                        rootRef.child("CodingEvent").child("CoordOTP").setValue("Code Expired");
-                        TextView textView1 = (TextView) findViewById(R.id.final_msg);
-                        textView1.setText("Code Expired");
-                    }
-                }.start();
-
-
-            }
-        });
 
 //        btnCheckOtp.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -114,6 +119,3 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-
-    }
-}
