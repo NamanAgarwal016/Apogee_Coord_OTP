@@ -44,14 +44,14 @@
 <!--        android:padding="16dp"-->
 <!--        android:text="Check OTP" />-->
 
-<!--    <TextView-->
-<!--        android:id="@+id/final_msg"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_centerInParent="true"-->
-<!--        android:layout_gravity="center_horizontal"-->
-<!--        android:padding="16dp"-->
-<!--        android:text=""-->
-<!--        android:textSize="16sp" />-->
+    <TextView
+        android:id="@+id/final_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal"
+        android:padding="16dp"
+        android:text=""
+        android:textSize="16sp" />
 
 </LinearLayout>

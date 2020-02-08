@@ -3,6 +3,7 @@ package com.example.android.apogeeotp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,15 +33,46 @@ public class MainActivity extends AppCompatActivity {
         //database reference pointing to root of database
         rootRef = FirebaseDatabase.getInstance().getReference();
 
+
+//        new CountDownTimer(90000, 1000) {
+//            public void onTick(long millisUntilFinished) {
+//                TextView textView1 = (TextView) findViewById(R.id.final_msg);
+//                textView1.setText(String.valueOf(millisUntilFinished / 1000));
+//            }
+//
+//            public void onFinish() {
+//                // Called after timer finishes
+//                rootRef.child("CodingEvent").child("CoordOTP").setValue("Code Expired");
+//                TextView textView1 = (TextView) findViewById(R.id.final_msg);
+//                textView1.setText("Code Expired");
+//            }
+//        }.start();
+
         btnGenerateOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Random r = new Random();
                 int i1 = r.nextInt(10000 - 1000) + 1000;
                 TextView textView = (TextView) findViewById(R.id.diplay_otp);
                 textView.setText(Integer.toString(i1));
 
                 rootRef.child("CodingEvent").child("CoordOTP").setValue(Integer.toString(i1));
+
+                new CountDownTimer(60000, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        TextView textView1 = (TextView) findViewById(R.id.final_msg);
+                        textView1.setText(String.valueOf(millisUntilFinished / 1000));
+                    }
+
+                    public void onFinish() {
+                        // Called after timer finishes
+                        rootRef.child("CodingEvent").child("CoordOTP").setValue("Code Expired");
+                        TextView textView1 = (TextView) findViewById(R.id.final_msg);
+                        textView1.setText("Code Expired");
+                    }
+                }.start();
+
 
             }
         });
